@@ -2,18 +2,20 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-class S(BaseHTTPRequestHandler):
-    def _do_POST(self):
-        self.send_response(200)
-        self.send_header("Content-type", "application/x-www-form-urlencoded")
-        self.end_headers()
+class Handler(BaseHTTPRequestHandler):
+    def do_POST(self):        
         print("asd")
-        
-def run(server_class=HTTPServer, handler_class=S, addr, port):
-    server_address = (addr, port)
-    httpd = server_class(server_address, handler_class)
-    print(f"Listening on {addr}:{port}")
-    httpd.serve_forever()
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
 
 if __name__ == "__main__":
-    run(addr="localhost", port=1337)
+    server_address = ("localhost", 1337)
+    server = HTTPServer(server_address, Handler)
+    
+    try:
+        print("Listening...")
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("Shutting down...")
+        server.socket.close()

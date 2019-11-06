@@ -3,8 +3,11 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 class Handler(BaseHTTPRequestHandler):
-    def do_POST(self):        
-        print("asd")
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        print(post_data.decode('utf-8'))
+        
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()

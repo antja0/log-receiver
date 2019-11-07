@@ -1,21 +1,17 @@
 #!/usr/bin/env python
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from colorama import init, Fore, Style
 
-class Colors:
-    WHITE = '\u001b[37m'
-    BRIGHT_YELLOW = '\u001b[33;1m'
-    RED = '\u001b[31m'
-    BRIGHT_RED = '\u001b[31;1m'
-    RESET = '\u001b[0m'
+init()
 
 class Handler(BaseHTTPRequestHandler):
     def get_color(self, level):
         levelColors = {
-            "DEBUG": Colors.WHITE,
-            "WARN": Colors.BRIGHT_YELLOW,
-            "ERROR": Colors.BRIGHT_RED,
-            "FATAL": Colors.RED
+            "DEBUG": Fore.WHITE,
+            "WARN": Fore.YELLOW,
+            "ERROR": Fore.RED,
+            "FATAL": Fore.RED
         }
         return levelColors.get(level, "")
 
@@ -33,7 +29,7 @@ class Handler(BaseHTTPRequestHandler):
 
         colorCode = self.get_color(logLevel)
         
-        print(f"{logTime} - {receiveIp} ({logName}): {colorCode}{logLevel} {logMessage} {Colors.RESET}\n")
+        print(f"{logTime} - {receiveIp} ({logName}): {colorCode}{logLevel} {logMessage} {Style.RESET_ALL}\n")
         
         self.send_response(200)
 
@@ -41,7 +37,7 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 if __name__ == "__main__":
-    server_address = ("localhost", 1337)
+    server_address = ('', 3000)
     server = HTTPServer(server_address, Handler)
     
     try:
